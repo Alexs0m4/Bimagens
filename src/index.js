@@ -62,12 +62,13 @@ app.set('port', process.env.PORT || 3000);
 
 // middlewares
 app.use(morgan('dev'));
+app.use(express.json());
 app.use(express.urlencoded({extended: false}));
 const storage = multer.diskStorage({
     destination: path.join(__dirname, 'public/img/uploads'),
     filename: (req, file, cb, filename) => {
         console.log(file);
-        cb(null, uuid() + path.extname(file.originalname));
+        cb(null, new Date().getTime() + path.extname(file.originalname));
     }
 }) 
 app.use(multer({storage}).single('image'));

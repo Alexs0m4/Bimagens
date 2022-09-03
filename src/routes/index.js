@@ -7,8 +7,13 @@ const mongoose = require('mongoose');
 // Models
 const Image = require('../models/Image');
 
-//
-
+//Cloudinary
+const cloudinary = require('cloudinary');
+cloudinary.config({
+    cloud_name: 'di10gxpk9',
+    api_key: '387534954954743',
+    api_secret: '4sn1RrpD2npPJCmZ1VfUwrQfgFU',
+})
 //
 
 router.get('/', async (req, res) => {
@@ -22,6 +27,7 @@ router.get('/upload', (req, res) => {
 
 router.post('/upload', async (req, res) => {
     const image = new Image();
+    
     image.title = req.body.title;
     image.description = req.body.description;
     image.filename = req.file.filename;
@@ -30,6 +36,7 @@ router.post('/upload', async (req, res) => {
     image.mimetype = req.file.mimetype;
     image.size = req.file.size;
 
+    const result = await cloudinary.v2.uploader.upload(req.file.path);
     await image.save();
     res.redirect('/');
 });
